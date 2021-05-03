@@ -19,7 +19,6 @@ It contains the following information:
 - The description of the input dataset in terms of the number of rows, columns, categorical columns and overall dataset size.
 - Peak memory usage (both execution and storage) and execution time, which represent the three target variables to be predicted by the regressor. In order to obtain more significant data, the metrics were aggregated on median values by performing ten executions per task.
 
-```
 | TaskName | TaskType | TaskClass | Rows | Columns | CategoricalColumns | Size | PeakStorageMemory | PeakExecutionMemory | Duration |
 |:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
 | GMM | Estimator | Clustering | 1474971 | 28 | 0 | 87.0045 | 433.37 | 1413.5 | 108204 |
@@ -32,6 +31,5 @@ It contains the following information:
 | DecisionTree | Transformer | Classification | 1959372 | 42 | 4 | 257.686 | 3.68 | 1e-06 | 65.5 |
 | NaiveBayes | Transformer | Classification | 347899 | 4 | 0 | 17.9982 | 4.26 | 1e-06 | 92.5 |
 | FPGrowth | Transformer | AssociationRules | 136073 | 34 | 34 | 13.5493 | 1229.95 | 633.5 | 52429 |
-```
 
 </div>
