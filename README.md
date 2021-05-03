@@ -1,0 +1,2 @@
+# IIWM
+Intelligent In-memory Workflow Manager (IIWM) is a solution for optimizing the in-memory execution of data-intensive workflows on parallel machines. IIWM is based on two complementary strategies: 1) a machine learning strategy for predicting memory occupancy and execution time of workflow tasks; 2) a scheduling strategy that allocates tasks to a computing node taking into account the (predicted) memory occupancy and execution time of each task, and the memory available on that node.
