@@ -1,73 +1,37 @@
 # IIWM
-Intelligent In-memory Workflow Manager (IIWM) is a solution for optimizing the in-memory execution of data-intensive workflows on parallel machines. IIWM is based on two complementary strategies: 1) a machine learning strategy for predicting memory occupancy and execution time of workflow tasks; 2) a scheduling strategy that allocates tasks to a computing node taking into account the (predicted) memory occupancy and execution time of each task, and the memory available on that node.
-
-# IOM-NN
-## Iterative Opinion Mining using Neural Networks
+## Intelligent In-memory Workflow Manager
 <div style="text-align: justify">
-Social media analysis is a fast growing research area aimed at extracting useful information from social media platforms. This paper presents a methodology, called IOM-NN (#Iterative Opinion Mining using Neural Networks#), for discovering the polarization of social media users during election campaigns characterized by the competition of political factions. The methodology uses an automatic incremental procedure based on feed-forward neural networks for analyzing the posts published by social media users. Starting from a limited set of classification rules, created from a small subset of hashtags that are notoriously in favor of specific factions, the methodology iteratively generates new classification rules. Such rules are then used to determine the polarization of people towards a faction. The methodology has been assessed on two case studies that analyze the polarization of a large number of Twitter users during the 2018 Italian general election and 2016 US presidential election. The achieved results are very close to the real ones and more accurate than the average of the opinion polls, revealing the high accuracy and effectiveness of the proposed approach. Moreover, our approach has been compared to the most relevant techniques used in the literature (sentiment analysis with NLP, adaptive sentiment analysis, emoji- and hashtag- based polarization)
-by achieving the best accuracy in estimating the polarization of social media users.
+Workflows are largely used to orchestrate complex sets of operations required to handle and process huge amounts of data. Parallel processing is often vital to reduce execution time when complex data-intensive workflows must be run efficiently, and at the same time in-memory processing can bring important benefits to accelerate execution. However, optimization techniques are necessary to fully exploit in-memory processing avoiding performance drops due to memory saturation events. This paper proposes a novel solution, called Intelligent In-memory Workflow Manager (IIWM), for optimizing the in-memory execution of data-intensive workflows on parallel machines. IIWM is based on two complementary strategies: 1) a machine learning strategy for predicting memory occupancy and execution time of workflow tasks; 2) a scheduling strategy that allocates tasks to a computing node taking into account the (predicted) memory occupancy and execution time of each task, and the memory available on that node.
+The effectiveness of the machine learning-based predictor and the scheduling strategy are demonstrated experimentally using as a testbed Spark, a high-performance Big Data processing framework that exploits in-memory computing to speed up execution of large-scale applications.
+In particular, two synthetic workflows have been prepared for testing the robustness of IIWM in scenarios characterized by a high level of parallelism and a limited amount of memory reserved for execution. Furthermore, a real data analysis workflow has been used as a case study, for better assessing the benefits of the proposed approach.
+Thanks to high accuracy in predicting resources used at runtime, IIWM was able to avoid disk writes caused by memory saturation, outperforming a traditional strategy in which only dependencies among tasks are taken into account.
+Specifically, IIWM achieved up to 31% and 40% reduction of makespan and a performance improvement up to 1.45x and 1.66x on the synthetic workflows and the real case study respectively.
 
 ## How to cite
-Belcastro, L., Cantini, R., Marozzo, F., Talia, D., & Trunfio, P. (2020). Learning political polarization on social media using neural networks. IEEE Access, 8, 47177-47187.
 
-## Getting Started
-
-These instructions will get you a copy of the project up and running on your local machine for development and 
-testing purposes.
-
-### Prerequisites
-
-```
-- Python 3.7
-```
-
-### Installing
-- Install requirements
-```
-pip install requirements.txt 
-```
-### Use
-- Run IOM-NN
-```
-python twitter_opinion_miner.py
-```
+R. Cantini, F. Marozzo, A. Orsino, D. Talia, P. Trunfio, "Exploiting Machine Learning For Improving In-memory Execution of Data-intensive Workflows on Parallel Machines". Future Internet, 2021. Note: To appear.
 
 ## Dataset
 
-The available dataset in the `input/` folder contains tweet collected from the state of Colorado before the 2016 US presidential elections.
-Unzip it into the `input/` folder before running IOM-NN. Each row of the dataset represents a tweet and is a json strings formatted as follows:
-```
-{
-   "id":"id",
-   "text":"tweet text",
-   "date":"date",
-   "user":{
-      "id":"user_id",
-      "name":"",
-      "screenName":"",
-      "location":"",
-      "lang":"en",
-      "description":""
-   },
-   "location":{
-      "latitude":0.0,
-      "longitude":0.0
-   },
-   "isRetweet":false,
-   "retweets":0,
-   "favoutites":0,
-   "inReplyToStatusId":-1,
-   "inReplyToUserId":-1,
-   "hashtags":[
-      "hashtag"
-   ],
-   "lang":"lang",
-   "place":{      
-   }
-}
-```
+The provided dataset was generated by monitoring, through the Spark APIs, the execution of several MLlib algorithms on different input datasets, covering the main data mining tasks, i.e. classification, clustering, and association rules. 
+It contains the following information:
+- The description of the task, such as its class (e.g., classification, clustering, etc.), type (fitting or predicting task), and algorithm (e.g., SVM, K-Means, etc.). 
+- The description of the input dataset in terms of the number of rows, columns, categorical columns and overall dataset size.
+- Peak memory usage (both execution and storage) and execution time, which represent the three target variables to be predicted by the regressor. In order to obtain more significant data, the metrics were aggregated on median values by performing ten executions per task.
 
-## Parameters
-`constants.py` contains all the parameters used in the methodology. Changing them will influence the obtained results.
+```
+| TaskName | TaskType | TaskClass | Rows | Columns | CategoricalColumns | Size | PeakStorageMemory | PeakExecutionMemory | Duration |
+|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
+| GMM | Estimator | Clustering | 1474971 | 28 | 0 | 87.0045 | 433.37 | 1413.5 | 108204 |
+| KMeans | Estimator | Clustering | 5000000 | 104 | 0 | 1239.78 | 4624.52 | 4112 | 56233.5 |
+| DecisionTree | Estimator | Classification | 9606 | 1921 | 0 | 84.9105 | 730.09 | 297.895 | 39292 |
+| NaiveBayes | Estimator | Classification | 260924 | 4 | 0 | 13.4986 | 340.92 | 6982.82 | 16531.5 |
+| FPGrowth | Estimator | AssociationRules | 823593 | 180 | 180 | 697 | 9493.85 | 1371.03 | 96071.5 |
+| GMM | Transformer | Clustering | 165474 | 14 | 1 | 6.36604 | 2.34 | 1e-06 | 62.5 |
+| KMeans | Transformer | Clustering | 4898431 | 42 | 3 | 648.887 | 3.23 | 1e-06 | 35 |
+| DecisionTree | Transformer | Classification | 1959372 | 42 | 4 | 257.686 | 3.68 | 1e-06 | 65.5 |
+| NaiveBayes | Transformer | Classification | 347899 | 4 | 0 | 17.9982 | 4.26 | 1e-06 | 92.5 |
+| FPGrowth | Transformer | AssociationRules | 136073 | 34 | 34 | 13.5493 | 1229.95 | 633.5 | 52429 |
+```
 
 </div>
